@@ -21,6 +21,7 @@ namespace NewLifeThriftShop.Areas.Identity
                         context.Configuration.GetConnectionString("NewLifeThriftShopContextConnection")));
 
                 services.AddDefaultIdentity<NewLifeThriftShopUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                    .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<NewLifeThriftShopContext>();
             });
         }

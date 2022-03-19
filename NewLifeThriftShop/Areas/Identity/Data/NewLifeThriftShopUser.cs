@@ -9,5 +9,13 @@ namespace NewLifeThriftShop.Areas.Identity.Data
     // Add profile data for application users by adding properties to the NewLifeThriftShopUser class
     public class NewLifeThriftShopUser : IdentityUser
     {
+        [PersonalData]
+        public string FullName { get; set; }
+
+        [PersonalData]
+        public string PhoneNo { get; set; }
+
+        [PersonalData]
+        public string Address { get; set; }
     }
 }

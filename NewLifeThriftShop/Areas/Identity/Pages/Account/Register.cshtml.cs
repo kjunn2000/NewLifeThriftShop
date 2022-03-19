@@ -24,17 +24,20 @@ namespace NewLifeThriftShop.Areas.Identity.Pages.Account
         private readonly UserManager<NewLifeThriftShopUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
             UserManager<NewLifeThriftShopUser> userManager,
             SignInManager<NewLifeThriftShopUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
         }
 
         [BindProperty]
@@ -47,6 +50,12 @@ namespace NewLifeThriftShop.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
+            [StringLength(100, ErrorMessage = "The full name should at at least 4 characters long.", MinimumLength = 4)]
+            [DataType(DataType.Text)]
+            [Display(Name = "FullName")]
+            public string FullName { get; set; }
+
+            [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
@@ -56,6 +65,23 @@ namespace NewLifeThriftShop.Areas.Identity.Pages.Account
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
+
+            [Required]
+            [StringLength(100, ErrorMessage = "The address should at least 6 characters long.", MinimumLength = 6)]
+            [DataType(DataType.Text)]
+            [Display(Name = "Address")]
+            public string Address { get; set; }
+
+            [Required]
+            [StringLength(100, ErrorMessage = "The phone number should at least 10 or 11 digits.", MinimumLength = 10)]
+            [DataType(DataType.PhoneNumber)]
+            [Display(Name = "PhoneNo")]
+            public string PhoneNo { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Role")]
+            public string Role { get; set; }
 
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
@@ -75,10 +101,27 @@ namespace NewLifeThriftShop.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new NewLifeThriftShopUser { UserName = Input.Email, Email = Input.Email };
+                var user = new NewLifeThriftShopUser { 
+                    UserName = Input.Email, 
+                    Email = Input.Email, 
+                    Address = Input.Address, 
+                    PhoneNo = Input.PhoneNo, 
+                    FullName = Input.FullName
+                };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
+                    if (Input.Role == "Customer" && !await _roleManager.RoleExistsAsync("Customer"))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole("Customer"));
+                    }
+                    if (Input.Role == "Seller" && !await _roleManager.RoleExistsAsync("Seller"))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole("Seller"));
+                    }
+
+                    await _userManager.AddToRoleAsync(user, Input.Role);
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
