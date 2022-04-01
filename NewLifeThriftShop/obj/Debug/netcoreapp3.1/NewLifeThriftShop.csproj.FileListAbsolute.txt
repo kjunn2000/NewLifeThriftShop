@@ -170,3 +170,10 @@ C:\Users\User\source\repos\NewLifeThriftShop\NewLifeThriftShop\obj\Debug\netcore
 C:\Users\User\source\repos\NewLifeThriftShop\NewLifeThriftShop\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\_ViewImports.cshtml.g.cs
 C:\Users\User\source\repos\NewLifeThriftShop\NewLifeThriftShop\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\_ViewStart.cshtml.g.cs
 C:\Users\User\source\repos\NewLifeThriftShop\NewLifeThriftShop\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_LoginPartial.cshtml.g.cs
+C:\Users\User\source\repos\NewLifeThriftShop\NewLifeThriftShop\obj\Debug\netcoreapp3.1\Razor\Views\Products\Create.cshtml.g.cs
+C:\Users\User\source\repos\NewLifeThriftShop\NewLifeThriftShop\obj\Debug\netcoreapp3.1\Razor\Views\Products\Delete.cshtml.g.cs
+C:\Users\User\source\repos\NewLifeThriftShop\NewLifeThriftShop\obj\Debug\netcoreapp3.1\Razor\Views\Products\Details.cshtml.g.cs
+C:\Users\User\source\repos\NewLifeThriftShop\NewLifeThriftShop\obj\Debug\netcoreapp3.1\Razor\Views\Products\Edit.cshtml.g.cs
+C:\Users\User\source\repos\NewLifeThriftShop\NewLifeThriftShop\obj\Debug\netcoreapp3.1\Razor\Views\Products\Index.cshtml.g.cs
+C:\Users\User\source\repos\NewLifeThriftShop\NewLifeThriftShop\bin\Debug\netcoreapp3.1\AWSSDK.Core.dll
+C:\Users\User\source\repos\NewLifeThriftShop\NewLifeThriftShop\bin\Debug\netcoreapp3.1\AWSSDK.S3.dll

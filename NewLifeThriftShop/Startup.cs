@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NewLifeThriftShop.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace NewLifeThriftShop
 {
@@ -27,6 +28,9 @@ namespace NewLifeThriftShop
         {
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            services.AddDbContext<NewLifeThriftShop_NewContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("NewLifeThriftShop_NewContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
