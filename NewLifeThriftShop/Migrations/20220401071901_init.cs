@@ -15,11 +15,6 @@ namespace NewLifeThriftShop.Migrations
                 name: "FullName",
                 table: "AspNetUsers",
                 nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "PhoneNo",
-                table: "AspNetUsers",
-                nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -30,10 +25,6 @@ namespace NewLifeThriftShop.Migrations
 
             migrationBuilder.DropColumn(
                 name: "FullName",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
-                name: "PhoneNo",
                 table: "AspNetUsers");
         }
     }

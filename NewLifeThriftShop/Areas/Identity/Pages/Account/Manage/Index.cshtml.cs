@@ -36,6 +36,15 @@ namespace NewLifeThriftShop.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            [Required(ErrorMessage = "Must key in name before submit the form")]
+            [Display(Name = "User Full Name")]
+            [StringLength(256, ErrorMessage = "The full name should at at least 4 characters long.", MinimumLength = 4)]
+            public string FullName { get; set; }
+
+            [Required]
+            [Display(Name = "User Address")]
+            public string Address { get; set; }
         }
 
         private async Task LoadAsync(NewLifeThriftShopUser user)
@@ -47,7 +56,9 @@ namespace NewLifeThriftShop.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                FullName = user.FullName,
+                Address = user.Address
             };
         }
 
@@ -88,6 +99,15 @@ namespace NewLifeThriftShop.Areas.Identity.Pages.Account.Manage
                 }
             }
 
+            if (Input.FullName != user.FullName)
+            {
+                user.FullName = Input.FullName;
+            }
+            if (Input.Address != user.Address)
+            {
+                user.Address = Input.Address;
+            }
+            await _userManager.UpdateAsync(user);
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();

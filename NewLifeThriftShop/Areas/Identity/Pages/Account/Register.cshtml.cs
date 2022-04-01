@@ -105,7 +105,7 @@ namespace NewLifeThriftShop.Areas.Identity.Pages.Account
                     UserName = Input.Email, 
                     Email = Input.Email, 
                     Address = Input.Address, 
-                    PhoneNo = Input.PhoneNo, 
+                    PhoneNumber = Input.PhoneNo, 
                     FullName = Input.FullName
                 };
                 var result = await _userManager.CreateAsync(user, Input.Password);

@@ -10,7 +10,7 @@ using NewLifeThriftShop.Data;
 namespace NewLifeThriftShop.Migrations
 {
     [DbContext(typeof(NewLifeThriftShopContext))]
-    [Migration("20220319032801_init")]
+    [Migration("20220401071901_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -196,9 +196,6 @@ namespace NewLifeThriftShop.Migrations
                         .HasMaxLength(256);
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNo")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
