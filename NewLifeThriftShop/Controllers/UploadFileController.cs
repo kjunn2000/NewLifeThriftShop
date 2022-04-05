@@ -17,6 +17,7 @@ namespace NewLifeThriftShop.Controllers
     public class UploadFileController : Controller
     {
         private const string bucketName = "newlifethriftshops3bucket";
+        private const string resizedBucketName = "newlifethriftshops3bucket-resized";
 
         public UploadFileController()
         {
@@ -50,11 +51,12 @@ namespace NewLifeThriftShop.Controllers
                 credentialInfo[2], Amazon.RegionEndpoint.USEast1);
             foreach (var image in images)
             {
+                string ext = Path.GetExtension(image.FileName);
                 var uploadRequest = new PutObjectRequest()
                 {
                     InputStream = image.OpenReadStream(),
-                    BucketName = bucketName + "/images",
-                    Key = productId,
+                    BucketName = bucketName,
+                    Key = productId + ext,
                     CannedACL = S3CannedACL.PublicRead
                 };
                 PutObjectResponse result = await S3Client.PutObjectAsync(uploadRequest);
@@ -113,10 +115,16 @@ namespace NewLifeThriftShop.Controllers
                     return;
                 var deleteObjectRequest = new DeleteObjectRequest
                 {
-                    BucketName = bucketName + "/images",
+                    BucketName = bucketName,
                     Key = FileName
                 };
-                var response = await S3Client.DeleteObjectAsync(deleteObjectRequest);
+                await S3Client.DeleteObjectAsync(deleteObjectRequest);
+                var deleteResizedObjectRequest = new DeleteObjectRequest
+                {
+                    BucketName = resizedBucketName,
+                    Key = "resized-"+FileName
+                };
+                await S3Client.DeleteObjectAsync(deleteResizedObjectRequest);
             }
             catch (Exception ex)
             {

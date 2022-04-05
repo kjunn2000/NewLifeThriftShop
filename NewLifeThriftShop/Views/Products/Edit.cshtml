@@ -33,8 +33,9 @@
                 <input asp-for="Quantity" class="form-control" />
                 <span asp-validation-for="Quantity" class="text-danger"></span>
             </div>
+            <input type="hidden" asp-for="ImgExt" />
             <input id="imageCheckbox" type="checkbox" name="imageCheckbox" onclick="toggleImageUpload()" />
-            <label for="imageCheckbox">Do you want to update product image? \n The old images will be removed.</label> 
+            <label for="imageCheckbox">Do you want to update product image? The old images will be removed.</label> 
              <div id="uploadFile" style="display:none">
                  <p>Upload File</p>
                  <input type="file" name="images" accept="image/*"/>

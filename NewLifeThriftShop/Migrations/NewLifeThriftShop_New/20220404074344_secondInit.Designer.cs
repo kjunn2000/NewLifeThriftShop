@@ -9,8 +9,8 @@ using NewLifeThriftShop.Data;
 namespace NewLifeThriftShop.Migrations.NewLifeThriftShop_New
 {
     [DbContext(typeof(NewLifeThriftShop_NewContext))]
-    [Migration("20220401080425_createProductTable")]
-    partial class createProductTable
+    [Migration("20220404074344_secondInit")]
+    partial class secondInit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

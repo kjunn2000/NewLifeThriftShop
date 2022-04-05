@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NewLifeThriftShop.Data;
 
 namespace NewLifeThriftShop.Migrations.NewLifeThriftShop_New
 {
     [DbContext(typeof(NewLifeThriftShop_NewContext))]
-    partial class NewLifeThriftShop_NewContextModelSnapshot : ModelSnapshot
+    [Migration("20220405135551_addImgExt")]
+    partial class addImgExt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

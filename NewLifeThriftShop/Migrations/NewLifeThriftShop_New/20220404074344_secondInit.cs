@@ -2,7 +2,7 @@
 
 namespace NewLifeThriftShop.Migrations.NewLifeThriftShop_New
 {
-    public partial class createProductTable : Migration
+    public partial class secondInit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -60,6 +60,10 @@ namespace NewLifeThriftShop.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (images.Any())
+                {
+                    product.ImgExt = System.IO.Path.GetExtension(images[0].FileName);
+                }
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 if (images.Any())
@@ -92,7 +96,7 @@ namespace NewLifeThriftShop.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,Category,Price,Quantity")] Product product, string imageCheckbox, List<IFormFile> images)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,Category,Price,Quantity,ImgExt")] Product product, List<IFormFile> images)
         {
 
             if (id != product.ProductId)
@@ -104,6 +108,14 @@ namespace NewLifeThriftShop.Controllers
             {
                 try
                 {
+                    if (images.Any())
+                    {
+                        product.ImgExt = System.IO.Path.GetExtension(images[0].FileName);
+                    }
+                    if (!String.IsNullOrEmpty(product.ImgExt))
+                    {
+                        await _uploadFileController.DeleteImage(id.ToString() + product.ImgExt);
+                    }
                     _context.Update(product);
                     await _context.SaveChangesAsync();
 
@@ -152,8 +164,11 @@ namespace NewLifeThriftShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _uploadFileController.DeleteImage(id.ToString());
             var product = await _context.Product.FindAsync(id);
+            if (!String.IsNullOrEmpty(product.ImgExt))
+            {
+                await _uploadFileController.DeleteImage(id.ToString() + product.ImgExt);
+            }
             _context.Product.Remove(product);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
