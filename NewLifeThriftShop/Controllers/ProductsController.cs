@@ -178,5 +178,10 @@ namespace NewLifeThriftShop.Controllers
         {
             return _context.Product.Any(e => e.ProductId == id);
         }
+
+        public async Task<IActionResult> ViewCatalog()
+        {
+            return View(await _context.Product.ToListAsync());
+        }
     }
 }
