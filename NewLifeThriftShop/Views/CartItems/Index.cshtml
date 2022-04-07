@@ -1,0 +1,59 @@
+﻿@model IEnumerable<NewLifeThriftShop.Models.CartItem>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Your Favourite Cart Item</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product.ProductName)
+            </th>
+            <th>
+                Subtotal Price
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+            double subTotal = item.Product.Price * item.Quantity;
+            <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.ProductName)
+            </td>
+            <td>
+                @subTotal
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.CartItemId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.CartItemId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.CartItemId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<p>
+    <h5>Total Amount : </h5>
+    <span>@ViewBag.TotalPrice</span>
+</p>
+<p>
+    <button type="button" class="btn btn-info" asp-action="Create">Make Order</button>
+</p>

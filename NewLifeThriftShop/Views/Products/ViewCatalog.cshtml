@@ -22,7 +22,13 @@
 									<div id="product-1" class="single-product">
 											<div class="part-1" style="--product-background: url(@link) no-repeat center;">
 													<ul>
-															<li><a href="#"><i class="fas fa-shopping-cart"></i></a></li>
+															<li>
+																	<form method="post">
+																		<button asp-controller="CartItems" asp-action="Create" asp-route-productId="@item.ProductId">
+																			<i class="fas fa-shopping-cart"></i>
+																		</button>																		
+																	</form>
+															</li>
 													</ul>
 											</div>
 											<div class="part-2">

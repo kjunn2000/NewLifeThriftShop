@@ -15,5 +15,7 @@ namespace NewLifeThriftShop.Data
         }
 
         public DbSet<NewLifeThriftShop.Models.Product> Product { get; set; }
+
+        public DbSet<NewLifeThriftShop.Models.CartItem> CartItem { get; set; }
     }
 }
