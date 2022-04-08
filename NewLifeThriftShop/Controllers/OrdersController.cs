@@ -77,6 +77,21 @@ namespace NewLifeThriftShop.Controllers
             {
                 ClaimsPrincipal currentUser = this.User;
                 var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+                var cartItemList = await _context.CartItem
+                    .Where(i => i.UserId == currentUserID)
+                    .Include(i => i.Product).ToListAsync();
+
+                var product = IsCartItemHasStock(cartItemList);
+                if (!string.IsNullOrEmpty(product))
+                {
+                    return RedirectToAction("Index", "CartItems", new
+                    {
+                        Message = "The stock of product - " +
+                        product + " is not enough."
+                    });
+                }
+
                 string orderId = System.Guid.NewGuid().ToString();
                 order.OrderId = orderId;
                 order.CustomerId = currentUserID;
@@ -94,7 +109,6 @@ namespace NewLifeThriftShop.Controllers
 
                 await _paymentsController.Create(payment);
 
-                var cartItemList = await _context.CartItem.Where(i => i.UserId == currentUserID).Include(i => i.Product).ToListAsync();
                 foreach (var cartItem in cartItemList)
                 {
                     var orderItem = new OrderItem();
@@ -104,9 +118,13 @@ namespace NewLifeThriftShop.Controllers
                     orderItem.Status = "PENDING";
                     orderItem.OrderId = orderId;
 
+                    cartItem.Product.Quantity -= cartItem.Quantity;
+                    _context.Update(cartItem.Product);
+                    await _context.SaveChangesAsync();
+
                     await _orderItemController.Create(orderItem);
 
-                    await _cartItemController.DeleteConfirmed(cartItem.CartItemId);
+                    await _cartItemController.DeleteCartItem(cartItem.CartItemId);
 
                 }
 
@@ -114,6 +132,18 @@ namespace NewLifeThriftShop.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(order);
+        }
+
+        public string IsCartItemHasStock (List<CartItem> cartItems)
+        {
+            foreach (var item in cartItems)
+            {
+                if (item.Quantity>item.Product.Quantity)
+                {
+                    return item.Product.ProductName;
+                }
+            }
+            return "";
         }
 
         // GET: Orders/Edit/5

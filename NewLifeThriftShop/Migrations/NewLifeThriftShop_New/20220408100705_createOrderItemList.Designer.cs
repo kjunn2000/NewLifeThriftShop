@@ -10,7 +10,7 @@ using NewLifeThriftShop.Data;
 namespace NewLifeThriftShop.Migrations.NewLifeThriftShop_New
 {
     [DbContext(typeof(NewLifeThriftShop_NewContext))]
-    [Migration("20220408090344_createOrderItemList")]
+    [Migration("20220408100705_createOrderItemList")]
     partial class createOrderItemList
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,10 +28,7 @@ namespace NewLifeThriftShop.Migrations.NewLifeThriftShop_New
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ProductId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ProductId1")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -42,7 +39,7 @@ namespace NewLifeThriftShop.Migrations.NewLifeThriftShop_New
 
                     b.HasKey("CartItemId");
 
-                    b.HasIndex("ProductId1");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("CartItem");
                 });
@@ -82,10 +79,7 @@ namespace NewLifeThriftShop.Migrations.NewLifeThriftShop_New
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<string>("ProductId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ProductId1")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -98,7 +92,7 @@ namespace NewLifeThriftShop.Migrations.NewLifeThriftShop_New
 
                     b.HasIndex("OrderId");
 
-                    b.HasIndex("ProductId1");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("OrderItem");
                 });
@@ -166,7 +160,9 @@ namespace NewLifeThriftShop.Migrations.NewLifeThriftShop_New
                 {
                     b.HasOne("NewLifeThriftShop.Models.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId1");
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("NewLifeThriftShop.Models.OrderItem", b =>
@@ -177,7 +173,9 @@ namespace NewLifeThriftShop.Migrations.NewLifeThriftShop_New
 
                     b.HasOne("NewLifeThriftShop.Models.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId1");
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("NewLifeThriftShop.Models.Payment", b =>

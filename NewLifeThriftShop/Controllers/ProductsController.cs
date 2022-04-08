@@ -187,7 +187,7 @@ namespace NewLifeThriftShop.Controllers
 
         public async Task<IActionResult> ViewCatalog()
         {
-            return View(await _context.Product.ToListAsync());
+            return View(await _context.Product.Where(p => p.Quantity > 0 ).ToListAsync());
         }
     }
 }

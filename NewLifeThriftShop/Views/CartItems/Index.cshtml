@@ -6,6 +6,10 @@
 
 <h1>Your Favourite Cart Item</h1>
 
+@if (ViewBag.Message != "")
+{
+    <script>alert("@ViewBag.Message")</script>
+}
 
 <table class="table">
     <thead>

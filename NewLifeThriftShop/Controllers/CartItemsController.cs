@@ -21,7 +21,7 @@ namespace NewLifeThriftShop.Controllers
         }
 
         // GET: CartItems
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string Message = "")
         {
             ClaimsPrincipal currentUser = this.User;
             var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -33,6 +33,7 @@ namespace NewLifeThriftShop.Controllers
             }
             ViewBag.TotalPrice = totalPrice;
             ViewBag.IsEmpty = totalPrice == 0;
+            ViewBag.Message = Message;
             return View(cartItemList);
         }
 
@@ -77,7 +78,7 @@ namespace NewLifeThriftShop.Controllers
                 cartItem.UserId = currentUserID;
                 var existRecord = await _context.CartItem
                 .Include(i => i.Product)
-                .FirstOrDefaultAsync(m => m.ProductId == productId && m.UserId == currentUserID);
+                .FirstOrDefaultAsync(m => m.ProductId == int.Parse(productId) && m.UserId == currentUserID);
                 if (existRecord != null)
                 {
                     return RedirectToAction("Edit", new
@@ -127,7 +128,7 @@ namespace NewLifeThriftShop.Controllers
             {
                 try
                 {
-                    var product = _context.Product.FindAsync(int.Parse(cartItem.ProductId)).Result;
+                    var product = _context.Product.FindAsync(cartItem.ProductId).Result;
                     cartItem.Product = product;
                     _context.Update(cartItem);
                     await _context.SaveChangesAsync();
@@ -169,7 +170,13 @@ namespace NewLifeThriftShop.Controllers
         // POST: CartItems/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            await DeleteCartItem(id);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task DeleteCartItem(int id)
         {
             var cartItem = await _context.CartItem.FindAsync(id);
             _context.CartItem.Remove(cartItem);
