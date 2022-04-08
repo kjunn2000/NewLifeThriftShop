@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,9 @@ namespace NewLifeThriftShop.Controllers
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Product.ToListAsync());
+            ClaimsPrincipal currentUser = this.User;
+            var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return View(await _context.Product.Where(p => p.SellerId == currentUserID).ToListAsync());
         }
 
         // GET: Products/Details/5
@@ -64,6 +67,9 @@ namespace NewLifeThriftShop.Controllers
                 {
                     product.ImgExt = System.IO.Path.GetExtension(images[0].FileName);
                 }
+                ClaimsPrincipal currentUser = this.User;
+                var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+                product.SellerId = currentUserID;
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 if (images.Any())

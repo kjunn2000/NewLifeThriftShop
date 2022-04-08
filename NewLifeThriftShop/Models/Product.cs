@@ -13,5 +13,7 @@
         public int Quantity { get; set; }
 
         public string ImgExt { get; set; }
+
+        public string SellerId { get; set; }
     }
 }

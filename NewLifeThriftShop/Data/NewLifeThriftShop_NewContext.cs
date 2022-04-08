@@ -17,5 +17,11 @@ namespace NewLifeThriftShop.Data
         public DbSet<NewLifeThriftShop.Models.Product> Product { get; set; }
 
         public DbSet<NewLifeThriftShop.Models.CartItem> CartItem { get; set; }
+
+        public DbSet<NewLifeThriftShop.Models.OrderItem> OrderItem { get; set; }
+
+        public DbSet<NewLifeThriftShop.Models.Order> Order { get; set; }
+
+        public DbSet<NewLifeThriftShop.Models.Payment> Payment { get; set; }
     }
 }

@@ -11,7 +11,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ProductId)
+                @Html.DisplayNameFor(model => model.Product.ProductId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Quantity)
@@ -30,7 +30,7 @@
             double subTotal = item.Product.Price * item.Quantity;
             <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.ProductId)
+                @Html.DisplayFor(modelItem => item.Product.ProductId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Quantity)
@@ -54,6 +54,15 @@
     <h5>Total Amount : </h5>
     <span>@ViewBag.TotalPrice</span>
 </p>
-<p>
-    <button type="button" class="btn btn-info" asp-action="Create">Make Order</button>
-</p>
+<form asp-action="CreateOrder" asp-controller="Orders" method="post">
+    <div class="form-group">
+        <label class="control-label">Payment Type</label>
+        <select class="form-control" name="paymentType">
+            <option value="CARD">Card</option>
+            <option value="ONLINE_BANKING">Online Banking</option>
+            <option value="E-WALLET">E-Wallet</option>
+        </select>
+    </div>
+    <input type="hidden" name="totalPrice" value="@ViewBag.TotalPrice" />
+  <button type="submit" class="btn btn-info" disabled="@ViewBag.IsEmpty">Pay Now</button>
+</form>

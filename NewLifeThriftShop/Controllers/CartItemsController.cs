@@ -32,6 +32,7 @@ namespace NewLifeThriftShop.Controllers
                 totalPrice += item.Product.Price * Convert.ToDouble(item.Quantity);
             }
             ViewBag.TotalPrice = totalPrice;
+            ViewBag.IsEmpty = totalPrice == 0;
             return View(cartItemList);
         }
 
@@ -168,12 +169,11 @@ namespace NewLifeThriftShop.Controllers
         // POST: CartItems/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task DeleteConfirmed(int id)
         {
             var cartItem = await _context.CartItem.FindAsync(id);
             _context.CartItem.Remove(cartItem);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
 
         private bool CartItemExists(int id)

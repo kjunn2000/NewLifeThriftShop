@@ -16,11 +16,15 @@
                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="ViewCatalog">Products</a>
+                <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="ViewCatalog">Product</a>
             </li>
             
             <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="CartItems" asp-action="Index">CartItems</a>
+                <a class="nav-link text-dark" asp-area="" asp-controller="CartItems" asp-action="Index">Cart</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Orders" asp-action="Index">Order</a>
             </li>
         }
         @if (User.IsInRole("Seller"))

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NewLifeThriftShop.Data;
 
 namespace NewLifeThriftShop.Migrations.NewLifeThriftShop_New
 {
     [DbContext(typeof(NewLifeThriftShop_NewContext))]
-    partial class NewLifeThriftShop_NewContextModelSnapshot : ModelSnapshot
+    [Migration("20220408090344_createOrderItemList")]
+    partial class createOrderItemList
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
