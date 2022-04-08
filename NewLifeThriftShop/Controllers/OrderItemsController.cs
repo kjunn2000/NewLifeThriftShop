@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -22,7 +23,13 @@ namespace NewLifeThriftShop.Controllers
         // GET: OrderItems
         public async Task<IActionResult> Index()
         {
-            var newLifeThriftShop_NewContext = _context.OrderItem.Include(o => o.Order);
+            ClaimsPrincipal currentUser = this.User;
+            var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var newLifeThriftShop_NewContext = _context.OrderItem
+                .Include(o => o.Order)
+                .Include(o => o.Product)
+                .Where(o => o.Product.SellerId == currentUserID);
             return View(await newLifeThriftShop_NewContext.ToListAsync());
         }
 
