@@ -24,7 +24,7 @@
                 @Html.DisplayNameFor(model => model.Product.ProductName)
             </th>
             <th>
-                Subtotal Price
+                Subtotal Price (RM)
             </th>
             <th></th>
         </tr>
@@ -68,5 +68,5 @@
         </select>
     </div>
     <input type="hidden" name="totalPrice" value="@ViewBag.TotalPrice" />
-  <button type="submit" class="btn btn-info" disabled="@ViewBag.IsEmpty">Pay Now</button>
+  <button type="submit" class="btn btn-info" disabled="@ViewBag.IsEmpty">Order Now</button>
 </form>

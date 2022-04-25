@@ -10,7 +10,7 @@ using NewLifeThriftShop.Data;
 namespace NewLifeThriftShop.Migrations.NewLifeThriftShop_New
 {
     [DbContext(typeof(NewLifeThriftShop_NewContext))]
-    [Migration("20220408100705_createOrderItemList")]
+    [Migration("20220425030757_createOrderItemList")]
     partial class createOrderItemList
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

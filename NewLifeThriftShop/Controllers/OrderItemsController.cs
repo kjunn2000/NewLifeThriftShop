@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -23,13 +22,7 @@ namespace NewLifeThriftShop.Controllers
         // GET: OrderItems
         public async Task<IActionResult> Index()
         {
-            ClaimsPrincipal currentUser = this.User;
-            var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-            var newLifeThriftShop_NewContext = _context.OrderItem
-                .Include(o => o.Order)
-                .Include(o => o.Product)
-                .Where(o => o.Product.SellerId == currentUserID);
+            var newLifeThriftShop_NewContext = _context.OrderItem.Include(o => o.Order).Include(o => o.Product);
             return View(await newLifeThriftShop_NewContext.ToListAsync());
         }
 
@@ -43,6 +36,7 @@ namespace NewLifeThriftShop.Controllers
 
             var orderItem = await _context.OrderItem
                 .Include(o => o.Order)
+                .Include(o => o.Product)
                 .FirstOrDefaultAsync(m => m.OrderItemId == id);
             if (orderItem == null)
             {
@@ -56,6 +50,7 @@ namespace NewLifeThriftShop.Controllers
         public IActionResult Create()
         {
             ViewData["OrderId"] = new SelectList(_context.Order, "OrderId", "OrderId");
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "ProductId");
             return View();
         }
 
@@ -64,7 +59,7 @@ namespace NewLifeThriftShop.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("OrderItemId,ProductId,Quantity,Price,Status,OrderId")] OrderItem orderItem)
+        public async Task<IActionResult> Create([Bind("OrderItemId,ProductId,Quantity,Price,OrderId")] OrderItem orderItem)
         {
             if (ModelState.IsValid)
             {
@@ -73,6 +68,7 @@ namespace NewLifeThriftShop.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["OrderId"] = new SelectList(_context.Order, "OrderId", "OrderId", orderItem.OrderId);
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "ProductId", orderItem.ProductId);
             return View(orderItem);
         }
 
@@ -90,6 +86,7 @@ namespace NewLifeThriftShop.Controllers
                 return NotFound();
             }
             ViewData["OrderId"] = new SelectList(_context.Order, "OrderId", "OrderId", orderItem.OrderId);
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "ProductId", orderItem.ProductId);
             return View(orderItem);
         }
 
@@ -98,7 +95,7 @@ namespace NewLifeThriftShop.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("OrderItemId,ProductId,Quantity,Price,Status,OrderId")] OrderItem orderItem)
+        public async Task<IActionResult> Edit(int id, [Bind("OrderItemId,ProductId,Quantity,Price,OrderId")] OrderItem orderItem)
         {
             if (id != orderItem.OrderItemId)
             {
@@ -126,6 +123,7 @@ namespace NewLifeThriftShop.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["OrderId"] = new SelectList(_context.Order, "OrderId", "OrderId", orderItem.OrderId);
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "ProductId", orderItem.ProductId);
             return View(orderItem);
         }
 
@@ -139,6 +137,7 @@ namespace NewLifeThriftShop.Controllers
 
             var orderItem = await _context.OrderItem
                 .Include(o => o.Order)
+                .Include(o => o.Product)
                 .FirstOrDefaultAsync(m => m.OrderItemId == id);
             if (orderItem == null)
             {

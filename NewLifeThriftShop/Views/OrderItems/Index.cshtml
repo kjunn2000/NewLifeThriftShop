@@ -4,22 +4,22 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Manage Order</h1>
+<h1>Index</h1>
 
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ProductId)
+                @Html.DisplayNameFor(model => model.Product)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Quantity)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Order)
@@ -31,7 +31,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.ProductId)
+                @Html.DisplayFor(modelItem => item.Product.ProductId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Quantity)
@@ -40,13 +40,12 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Order.OrderId)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.OrderItemId">Edit</a>
+                <a asp-action="Edit" asp-route-id="@item.OrderItemId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.OrderItemId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.OrderItemId">Delete</a>
             </td>
         </tr>
 }

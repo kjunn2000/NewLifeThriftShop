@@ -1,4 +1,7 @@
-﻿@model IEnumerable<NewLifeThriftShop.Models.Order>
+﻿@using Microsoft.AspNetCore.Identity
+@using NewLifeThriftShop.Areas.Identity.Data
+@model IEnumerable<NewLifeThriftShop.Models.Order>
+@inject UserManager<NewLifeThriftShopUser> UserManager
 
 @{
     ViewData["Title"] = "Index";
@@ -13,7 +16,7 @@
                 @Html.DisplayNameFor(model => model.OrderId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                @Html.DisplayNameFor(model => model.Price) (RM)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Status)
@@ -47,7 +50,11 @@
             </td>
             <td>
                 <a asp-action="Details" asp-route-id="@item.OrderId">Details</a>
-            </td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                       <a asp-action="Edit" asp-route-id="@item.OrderId">Edit</a>
+                    }
+                </td>
         </tr>
 }
     </tbody>

@@ -115,9 +115,9 @@ namespace NewLifeThriftShop.Areas.Identity.Pages.Account
                     {
                         await _roleManager.CreateAsync(new IdentityRole("Customer"));
                     }
-                    if (Input.Role == "Seller" && !await _roleManager.RoleExistsAsync("Seller"))
+                    if (Input.Role == "Admin" && !await _roleManager.RoleExistsAsync("Admin"))
                     {
-                        await _roleManager.CreateAsync(new IdentityRole("Seller"));
+                        await _roleManager.CreateAsync(new IdentityRole("Admin"));
                     }
 
                     await _userManager.AddToRoleAsync(user, Input.Role);

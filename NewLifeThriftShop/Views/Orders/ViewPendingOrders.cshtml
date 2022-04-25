@@ -1,0 +1,39 @@
+﻿@model List<KeyValuePair<OrderDto, string>>
+
+@{
+    ViewData["Title"] = "ViewPendingOrders";
+}
+
+<h1>Pending Order List</h1>
+
+<h5>@Model.Count of orders are pending.</h5>
+
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+        <th>Order ID</th>
+        <th>Customer ID</th>
+        <th>Price (RM)</th>
+        <th>Date</th>
+        <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var message in Model)
+    {
+        <tr>
+            <td>@message.Key.OrderId</td>
+            <td>@message.Key.CustomerId<td>
+            <td>@message.Key.Price</td>
+            <td>@message.Key.CreatedAt</td>
+            <td>
+                <a asp-action="Details" asp-route-id="@message.Key.OrderId">Details</a> |
+                <a asp-action="AcceptOrder" asp-route-receiptHandler="@message.Value" 
+                      asp-route-orderId="@message.Key.OrderId">Accept</a> |
+                <a asp-action="RejectOrder" asp-route-receiptHandler="@message.Value" 
+                      asp-route-orderId="@message.Key.OrderId">Reject</a>
+            </td>
+        </tr>
+    }
+  </tbody>
+</table>

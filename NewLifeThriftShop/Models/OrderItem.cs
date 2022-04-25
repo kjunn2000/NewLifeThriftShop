@@ -16,8 +16,6 @@ namespace NewLifeThriftShop.Models
 
         public double Price { get; set; }
 
-        public string Status    { get; set; }
-
         [ForeignKey("OrderId")]
         public string OrderId { get; set; }
         public virtual Order Order { get; set; }

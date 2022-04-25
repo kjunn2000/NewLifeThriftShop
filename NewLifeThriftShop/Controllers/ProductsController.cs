@@ -27,7 +27,7 @@ namespace NewLifeThriftShop.Controllers
         {
             ClaimsPrincipal currentUser = this.User;
             var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-            return View(await _context.Product.Where(p => p.SellerId == currentUserID).ToListAsync());
+            return View(await _context.Product.ToListAsync());
         }
 
         // GET: Products/Details/5
@@ -69,7 +69,6 @@ namespace NewLifeThriftShop.Controllers
                 }
                 ClaimsPrincipal currentUser = this.User;
                 var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-                product.SellerId = currentUserID;
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 if (images.Any())

@@ -15,7 +15,7 @@ namespace NewLifeThriftShop.Migrations.NewLifeThriftShop_New
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.23")
+                .HasAnnotation("ProductVersion", "3.1.24")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -83,9 +83,6 @@ namespace NewLifeThriftShop.Migrations.NewLifeThriftShop_New
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("OrderItemId");
 
                     b.HasIndex("OrderId");
@@ -145,9 +142,6 @@ namespace NewLifeThriftShop.Migrations.NewLifeThriftShop_New
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
-
-                    b.Property<string>("SellerId")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProductId");
 

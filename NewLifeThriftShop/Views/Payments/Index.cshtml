@@ -4,16 +4,13 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Historical Payment Record</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.CustomerId)
+                @Html.DisplayNameFor(model => model.PaymentId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PaymentMethod)
@@ -27,6 +24,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.CreatedAt)
             </th>
+            <th>
+                Status
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -34,7 +34,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.CustomerId)
+                @Html.DisplayFor(modelItem => item.PaymentId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PaymentMethod)
@@ -49,10 +49,18 @@
                 @Html.DisplayFor(modelItem => item.CreatedAt)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.PaymentId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.PaymentId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.PaymentId">Delete</a>
-            </td>
+                    @if (item.Order.Status == "CANCELLED")
+                    {
+                        <span>REFUND</span>
+                    }
+                    else if (item.Order.Status == "PENDING")
+                    {
+                        <span>PENDING</span>
+                    }else
+                    {                        
+                        <span>SUCCESS</span>
+                    }
+                </td>
         </tr>
 }
     </tbody>
