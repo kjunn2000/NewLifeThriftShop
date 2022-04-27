@@ -23,8 +23,10 @@
 											<div class="part-1" style="--product-background: url(@link) no-repeat center;">
 													<ul>
 															<li>
-																	<form method="post">
-																		<button asp-controller="CartItems" asp-action="Create" asp-route-productId="@item.ProductId">
+																	<form method="post" class="bg-white">
+																		<button asp-controller="CartItems" asp-action="Create" asp-route-productId="@item.ProductId"
+																			class="btn btn-link p-2"
+																		>
 																			<i class="fas fa-shopping-cart"></i>
 																		</button>																		
 																	</form>
@@ -34,7 +36,7 @@
 											<div class="part-2">
 													<h3 class="product-title">@Html.DisplayFor(modelItem => item.ProductName)</h3>
 													<h5 class="product-price">RM @Html.DisplayFor(modelItem => item.Price)</h5>
-													<h5 class="product-price">@Html.DisplayFor(modelItem => item.Quantity) left</h5>
+													<span class="text-danger font-weight-lighter">@Html.DisplayFor(modelItem => item.Quantity) left</span>
 											</div>
 									</div>
 							</div>

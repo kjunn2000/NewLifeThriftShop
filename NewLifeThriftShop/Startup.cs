@@ -11,6 +11,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using NewLifeThriftShop.Data;
 using Microsoft.EntityFrameworkCore;
+using Amazon.XRay.Recorder.Handlers.AwsSdk;
+using Amazon.XRay.Recorder.Core;
 
 namespace NewLifeThriftShop
 {
@@ -19,6 +21,8 @@ namespace NewLifeThriftShop
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            AWSXRayRecorder.InitializeInstance(configuration: Configuration);
+            AWSSDKHandler.RegisterXRayForAllServices();
         }
 
         public IConfiguration Configuration { get; }
@@ -46,6 +50,8 @@ namespace NewLifeThriftShop
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseXRay("newlifethriftshop-app");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
