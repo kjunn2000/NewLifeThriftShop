@@ -115,12 +115,13 @@ namespace NewLifeThriftShop.Controllers
                 {
                     if (images.Any())
                     {
+                        if (!String.IsNullOrEmpty(product.ImgExt))
+                        {
+                            await _uploadFileController.DeleteImage(id.ToString() + product.ImgExt);
+                        }
                         product.ImgExt = System.IO.Path.GetExtension(images[0].FileName);
                     }
-                    if (!String.IsNullOrEmpty(product.ImgExt))
-                    {
-                        await _uploadFileController.DeleteImage(id.ToString() + product.ImgExt);
-                    }
+
                     _context.Update(product);
                     await _context.SaveChangesAsync();
 
