@@ -7,6 +7,11 @@
     ViewData["Title"] = "Index";
 }
 
+@if (ViewBag.Message != "")
+{
+    <script>alert("@ViewBag.Message")</script>
+}
+
 <h1>Check Your Order Here</h1>
 
 <table class="table">

@@ -42,8 +42,9 @@ namespace NewLifeThriftShop.Controllers
         }
 
         // GET: Orders
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string message = "")
         {
+            ViewBag.Message = message;
             if (this.User.IsInRole("Admin"))
             {
                 return View(await _context.Order
@@ -107,7 +108,8 @@ namespace NewLifeThriftShop.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateOrder([Bind("OrderId,CustomerId,Price,Status,CreatedAt")] Order order, double totalPrice, string paymentType)
+        public async Task<IActionResult> CreateOrder([Bind("OrderId,CustomerId,Price,Status,CreatedAt")] 
+            Order order, double totalPrice, string paymentType)
         {
             if (ModelState.IsValid)
             {
@@ -128,7 +130,7 @@ namespace NewLifeThriftShop.Controllers
                     });
                 }
 
-                string orderId = System.Guid.NewGuid().ToString();
+                string orderId = Guid.NewGuid().ToString();
                 order.OrderId = orderId;
                 order.CustomerId = currentUserID;
                 order.Price = totalPrice;
@@ -279,7 +281,7 @@ namespace NewLifeThriftShop.Controllers
             var queryString = new Dictionary<string, string>()
             {
                 { "message", contentQueryStr },
-                {   "topic", "arn:aws:sns:us-east-1:570877075017:NewLifeOrder"}
+                { "topic", "arn:aws:sns:us-east-1:570877075017:NewLifeOrder"}
             };
 
             var client = new HttpClient();
@@ -294,45 +296,44 @@ namespace NewLifeThriftShop.Controllers
 
         public async Task<IActionResult> ViewPendingOrders(string message = "")
         {
-            ViewBag.msg = message;
+            ViewBag.Message = message;
             List<string> credentialInfo = getAWSCredentialInfo();
-            var sqsClient = new AmazonSQSClient(credentialInfo[0], credentialInfo[1], credentialInfo[2], Amazon.RegionEndpoint.USEast1);
+            var sqsClient = new AmazonSQSClient(credentialInfo[0], credentialInfo[1], 
+                credentialInfo[2], Amazon.RegionEndpoint.USEast1);
             var response = await sqsClient.GetQueueUrlAsync(new GetQueueUrlRequest { QueueName = queueName });
-            List<KeyValuePair<OrderDto, string>> oderListQueue = new List<KeyValuePair<OrderDto, string>>();
+            List<KeyValuePair<OrderDto, string>> orderListQueue = new List<KeyValuePair<OrderDto, string>>();
             try
             {
-                ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest();
-                receiveMessageRequest.QueueUrl = response.QueueUrl;
-                receiveMessageRequest.MaxNumberOfMessages = 10;
-                receiveMessageRequest.WaitTimeSeconds = 20;
-                receiveMessageRequest.VisibilityTimeout = 20;
-
-                ReceiveMessageResponse receiveMessageResponse = await sqsClient.ReceiveMessageAsync(receiveMessageRequest);
+                ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest
+                {
+                    QueueUrl = response.QueueUrl,
+                    MaxNumberOfMessages = 10,
+                    WaitTimeSeconds = 20,
+                    VisibilityTimeout = 20
+                };
+                ReceiveMessageResponse receiveMessageResponse = await 
+                    sqsClient.ReceiveMessageAsync(receiveMessageRequest);
 
                 if (receiveMessageResponse.Messages.Count != 0)
                 {
                     for (int i = 0; i < receiveMessageResponse.Messages.Count; i++)
                     {
-                        System.Diagnostics.Debug.WriteLine(i);
-                        QueueResponse queueResponse = JsonConvert.DeserializeObject<QueueResponse>(receiveMessageResponse.Messages[i].Body);
-
+                        QueueResponse queueResponse = JsonConvert.
+                            DeserializeObject<QueueResponse>(receiveMessageResponse.Messages[i].Body);
                         var dict = HttpUtility.ParseQueryString(queueResponse.Message);
-                        System.Diagnostics.Debug.WriteLine(dict);
-                        string json = JsonConvert.SerializeObject(dict.Cast<string>().ToDictionary(k => k, v => dict[v]));
-                        System.Diagnostics.Debug.WriteLine(json);
-
+                        string json = JsonConvert.SerializeObject(dict.
+                            Cast<string>().ToDictionary(k => k, v => dict[v]));
                         OrderDto order = JsonConvert.DeserializeObject<OrderDto>(json);
-                        System.Diagnostics.Debug.Write(order);
-
                         var receiptHandle = receiveMessageResponse.Messages[i].ReceiptHandle;
-                        oderListQueue.Add(new KeyValuePair<OrderDto, string>(order, receiptHandle));
+                        orderListQueue.Add(new KeyValuePair<OrderDto, string>(order, receiptHandle));
                     }
                 }
-                return View(oderListQueue);
+                return View(orderListQueue);
             }
             catch (Exception e)
             {
-                return View(oderListQueue);
+                System.Diagnostics.Debug.Print(e.ToString());
+                return View(orderListQueue);
             }
         }
 
@@ -345,11 +346,13 @@ namespace NewLifeThriftShop.Controllers
                 _context.Update(order);
                 await _context.SaveChangesAsync();
                 await DeleteMessage(receiptHandler);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { message = "Order Id - " + 
+                    orderId + " is accepted and removed from queue."});
             }
             catch (Exception ex)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("ViewPendingOrders",
+                    new { message = "Error : " + ex.ToString() });
             }
         }
 
@@ -362,11 +365,13 @@ namespace NewLifeThriftShop.Controllers
                 _context.Update(order);
                 await _context.SaveChangesAsync();
                 await DeleteMessage(receiptHandler);
-                return RedirectToAction("ViewPendingOrders");
+                return RedirectToAction("ViewPendingOrders", new { message = "Order Id - " + 
+                    orderId + " is rejected and removed from queue." });
             }
             catch (Exception ex)
             {
-                return RedirectToAction("ViewPendingOrders");
+                return RedirectToAction("ViewPendingOrders", 
+                    new {message = "Error : "+ ex.ToString()});
             }
         }
 
@@ -375,8 +380,10 @@ namespace NewLifeThriftShop.Controllers
             try
             {
                 List<string> credentialInfo = getAWSCredentialInfo();
-                var sqsClient = new AmazonSQSClient(credentialInfo[0], credentialInfo[1], credentialInfo[2], Amazon.RegionEndpoint.USEast1);
-                var response = await sqsClient.GetQueueUrlAsync(new GetQueueUrlRequest { QueueName = queueName });
+                var sqsClient = new AmazonSQSClient(credentialInfo[0], credentialInfo[1], 
+                    credentialInfo[2], Amazon.RegionEndpoint.USEast1);
+                var response = await sqsClient.GetQueueUrlAsync(new GetQueueUrlRequest 
+                    { QueueName = queueName });
 
                 var delRequest = new DeleteMessageRequest
                 {
@@ -384,10 +391,6 @@ namespace NewLifeThriftShop.Controllers
                     ReceiptHandle = receiptHandler
                 };
                 var delResponse = await sqsClient.DeleteMessageAsync(delRequest);
-            }
-            catch (AmazonSQSException ex)
-            {
-                System.Diagnostics.Debug.Print(ex.ToString());
             }
             catch (Exception ex)
             {

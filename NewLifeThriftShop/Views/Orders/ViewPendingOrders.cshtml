@@ -4,6 +4,11 @@
     ViewData["Title"] = "ViewPendingOrders";
 }
 
+@if (ViewBag.Message != "")
+{
+    <script>alert("@ViewBag.Message")</script>
+}
+
 <h1>Pending Order List</h1>
 
 <h5>@Model.Count order(s) is pending.</h5>
