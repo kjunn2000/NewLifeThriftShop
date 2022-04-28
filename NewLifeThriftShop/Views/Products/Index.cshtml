@@ -6,6 +6,11 @@
 
 <h1>Manage Product</h1>
 
+@if (ViewBag.Message != "")
+{
+    <script>alert("@ViewBag.Message")</script>
+}
+
 <p>
     <a asp-action="Create">Create New</a>
 </p>

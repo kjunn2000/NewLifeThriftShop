@@ -23,8 +23,9 @@ namespace NewLifeThriftShop.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string message = "")
         {
+            ViewBag.Message = message;
             ClaimsPrincipal currentUser = this.User;
             var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
             return View(await _context.Product.ToListAsync());
@@ -65,6 +66,10 @@ namespace NewLifeThriftShop.Controllers
             {
                 if (images.Any())
                 {
+                    if (images[0].Length > 1048576)
+                    {
+                        RedirectToAction("Index", new { Message = "The file must less than  1 MB." });
+                    }
                     product.ImgExt = System.IO.Path.GetExtension(images[0].FileName);
                 }
                 ClaimsPrincipal currentUser = this.User;
@@ -185,9 +190,14 @@ namespace NewLifeThriftShop.Controllers
             return _context.Product.Any(e => e.ProductId == id);
         }
 
-        public async Task<IActionResult> ViewCatalog()
+        public async Task<IActionResult> ViewCatalog(string SearchString)
         {
-            return View(await _context.Product.Where(p => p.Quantity > 0 ).ToListAsync());
+            var productQuery = _context.Product.Where(p => p.Quantity > 0);
+            if (!string.IsNullOrEmpty(SearchString))
+            {
+                productQuery = productQuery.Where(s => s.ProductName.Contains(SearchString));
+            }
+            return View(await productQuery.ToListAsync());
         }
     }
 }
